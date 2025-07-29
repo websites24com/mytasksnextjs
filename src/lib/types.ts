@@ -7,5 +7,7 @@ import { RowDataPacket } from 'mysql2';
 export interface UserRow extends RowDataPacket {
   id: number;            // Primary key
   email: string;         // User's email
-  password: string;      // Hashed password
+  password: string;      // Hashed 
+  first_name: string;
+  last_name: string;
 }

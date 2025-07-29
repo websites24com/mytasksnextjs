@@ -5,25 +5,21 @@ import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 
 export default function RegisterPage() {
-  // Form input states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // For showing error or success messages
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // Router to redirect the user after registration
   const router = useRouter();
 
-  // Function that runs when the form is submitted
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault(); // prevent default page reload
+    e.preventDefault();
     setError('');
-    setSuccess('');
+    setLoading(true);
 
     try {
-      // Send registration data to the API
+      // Call register route
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -32,13 +28,13 @@ export default function RegisterPage() {
 
       const data = await res.json();
 
-      // If registration failed, show error
       if (!res.ok) {
         setError(data.error || 'Registration failed');
+        setLoading(false);
         return;
       }
 
-      // ✅ SUCCESS: now log in the user automatically
+      // Auto login after successful registration
       const login = await signIn('credentials', {
         redirect: false,
         email,
@@ -48,45 +44,44 @@ export default function RegisterPage() {
       if (login?.error) {
         setError('Registered successfully, but auto-login failed.');
       } else {
-        // ✅ Logged in successfully → redirect
-        router.push('/');
+        router.push('/user'); // or wherever your dashboard is
       }
     } catch (err) {
+      console.error(err);
       setError('Something went wrong.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
+    <div style={{ maxWidth: '400px', margin: 'auto', padding: '2rem' }}>
       <h1>Register</h1>
 
-      {/* Error message */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {/* Success message */}
-      {success && <p style={{ color: 'green' }}>{success}</p>}
-
       <form onSubmit={handleRegister}>
-        {/* Email input */}
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
+          style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
         />
 
-        {/* Password input */}
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
+          style={{ display: 'block', marginBottom: '1rem', width: '100%' }}
         />
 
-        {/* Submit button */}
-        <button type="submit">Register</button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Registering...' : 'Register'}
+        </button>
       </form>
     </div>
   );

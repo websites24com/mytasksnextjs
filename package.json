@@ -12,18 +12,18 @@
     "bcrypt": "^6.0.0",
     "mysql2": "^3.14.2",
     "next": "15.4.4",
-    "next-auth": "^4.24.11",
+    "next-auth": "^4.24.6",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@eslint/eslintrc": "^3.0.0",
     "@types/bcrypt": "^6.0.0",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
+    "@types/node": "^20.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.0.0",
     "eslint-config-next": "15.4.4",
-    "typescript": "^5"
+    "typescript": "^5.0.0"
   }
 }
